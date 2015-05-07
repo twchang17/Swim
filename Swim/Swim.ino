@@ -2,11 +2,11 @@
 #include <MeggyJrSimple.h>    
 int X=1;
 int Y=1;
-int X1;
+int X1=6;
+int Y1=7;
 int X2;
-int X3;
-int Y1;
 int Y2;
+int X3;
 int Y3;
 void setup()                 
 {
@@ -16,7 +16,7 @@ void setup()
 void loop()                   
 {
   DrawPx(X,Y,1);
-  DrawPx(X1,X2,Green);
+  DrawPx(X1,Y1,Green);
   DisplaySlate();
   ClearSlate(); 
   playerMovement();
@@ -90,16 +90,16 @@ void enemy1()
   if(Button_Up) 
   { 
     if(Y>Y1)
-    Y++;
+    Y1++;
     if(Y<Y1)
-    Y--;
+    Y1--;
   }
   if(Button_Down) 
   { 
     if(Y>Y1)
-    Y++;
+    Y1++;
     if(Y<Y1)
-    Y--;
+    Y1--;
   }
 }
 // enemy is moving along with player
