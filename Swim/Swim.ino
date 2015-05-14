@@ -1,13 +1,17 @@
-
 #include <MeggyJrSimple.h>    
 int X=1;
 int Y=1;
-int X1=6;
-int Y1=7;
-int X2=1;
-int Y2=7;
-int X3=7;
-int Y3=0;
+
+struct Point{
+  int x;
+  int y;
+};
+
+Point p1 = {6,7}; //enemies kept in an array
+Point p2 = {1,7};
+Point p3 = {7,0};
+Point e[64] = {p1,p2,p3};
+
 boolean gameOver = false;
 boolean X1Alive = true;
 boolean X2Alive = true;
@@ -22,33 +26,31 @@ void loop()
 {
   while (gameOver == false)
 {
-  DrawPx(X,Y,White);
+  DrawPx(X,Y,White); //player
   if(X1Alive)
-    DrawPx(X1,Y1,Green);
+    DrawPx(e[0].x,e[0].y,Green); //enemy 1 (drawings)
   else
-    DrawPx(X1,Y1,Red);
+    DrawPx(e[0].x,e[0].y,Red);
   if(X2Alive)
-    DrawPx(X2,Y2,Blue);
+    DrawPx(e[1].x,e[1].y,Blue); //enemy 2 (drawings)
   else
-    DrawPx(X2,Y2,Red);
+    DrawPx(e[1].x,e[1].y,Red);
   if(X3Alive)
-    DrawPx(X3,Y3,Orange);
+    DrawPx(e[2].x,e[2].y,Orange); //enemy 3 (drawings)
   else
-    DrawPx(X3,Y3,Red);
+    DrawPx(e[2].x,e[2].y,Red);
   DisplaySlate();
   ClearSlate(); 
   playerMovement();
   //updateAmmo
-  if (X1Alive)
+  if (X1Alive) //movement
     enemy1();
-  if (X2Alive)
+  if (X2Alive) //movement
     enemy2();
-  if (X3Alive)
+  if (X3Alive) //movement
     enemy3();
   crash();
-  collide();
-  
-                  
+  collide();                 
 }
   displayX();
 }
@@ -101,31 +103,31 @@ void enemy1()
 {
   if(Button_Left) 
   { 
-    if(X>X1)
-      X1++;
-    if(X<X1)
-      X1--;
+    if(X>e[0].x)
+      e[0].x++;
+    if(X<e[0].x)
+      e[0].x--;
   }
   if(Button_Right)
   { 
-    if(X>X1)
-      X1++;
-    if(X<X1)
-      X1--;
+    if(X>e[0].x)
+      e[0].x++;
+    if(X<e[0].x)
+      e[0].x--;
   }  
   if(Button_Up) 
   { 
-    if(Y>Y1)
-      Y1++;
-    if(Y<Y1)
-      Y1--;
+    if(Y>e[0].y)
+      e[0].y++;
+    if(Y<e[0].y)
+      e[0].y--;
   }
   if(Button_Down) 
   { 
-    if(Y>Y1)
-      Y1++;
-    if(Y<Y1)
-      Y1--;
+    if(Y>e[0].y)
+      e[0].y++;
+    if(Y<e[0].y)
+      e[0].y--;
   }
 }
 // enemy is moving along with player
@@ -135,31 +137,31 @@ void enemy2()
 {
   if(Button_Left) 
   { 
-    if(X>X2)
-    X2++;
-    if(X<X2)
-    X2--;
+    if(X>e[1].x)
+      e[1].x++;
+    if(X<e[1].x)
+      e[1].x--;
   }
   if(Button_Right)
   { 
-    if(X>X2)
-    X2++;
-    if(X<X2)
-    X2--;
+    if(X>e[1].x)
+      e[1].x++;
+    if(X<e[1].x)
+      e[1].x--;
   }  
   if(Button_Up) 
   { 
-    if(Y>Y2)
-    Y2++;
-    if(Y<Y2)
-    Y2--;
+    if(Y>e[1].y)
+      e[1].y++;
+    if(Y<e[1].y)
+      e[1].y--;
   }
   if(Button_Down) 
   { 
-    if(Y>Y2)
-    Y2++;
-    if(Y<Y2)
-    Y2--;
+    if(Y>e[1].y)
+    e[1].y++;
+    if(Y<e[1].y)
+    e[1].y--;
   }
 }
 
@@ -167,31 +169,31 @@ void enemy3()
 {
   if(Button_Left) 
   { 
-    if(X>X3)
-    X3++;
-    if(X<X3)
-    X3--;
+    if(X>e[2].x)
+      e[2].x++;
+    if(X<e[2].x)
+      e[2].x--;
   }
   if(Button_Right)
   { 
-    if(X>X3)
-    X3++;
-    if(X<X3)
-    X3--;
+    if(X>e[2].x)
+      e[2].x++;
+    if(X<e[2].x)
+      e[2].x--;
   }  
   if(Button_Up) 
   { 
-    if(Y>Y3)
-    Y3++;
-    if(Y<Y3)
-    Y3--;
+    if(Y>e[2].y)
+      e[2].y++;
+    if(Y<e[2].y)
+      e[2].y--;
   }
   if(Button_Down) 
   { 
-    if(Y>Y3)
-    Y3++;
-    if(Y<Y3)
-    Y3--;
+    if(Y>e[2].y)
+      e[2].y++;
+    if(Y<e[2].y)
+      e[2].y--;
   }
 }
 void flag()
@@ -200,11 +202,19 @@ void flag()
 }
 
   
-void crash() {
- if (X1==X && Y1==Y)
+void crash() { //player collison with enemy
+ if (e[0].x==X && e[0].y==Y)
   {
     gameOver=true;
   }
+ if (e[1].x==X && e[1].y==Y)
+  {
+    gameOver=true;
+  }
+ if (e[2].x==X && e[2].y==Y)
+  {
+    gameOver=true;
+  } 
 }  
   
 void displayX()
@@ -220,12 +230,12 @@ void displayX()
     gameOver=false;
     X=1;
     Y=1;
-    X1=6;
-    Y1=7;
-    X2=1;
-    Y2=7;
-    X3=7;
-    Y3=0;
+    e[0].x=6;
+    e[0].y=7;
+    e[1].x=1;
+    e[1].y=7;
+    e[2].x=7;
+    e[2].y=0;
     X1Alive = true;
     X2Alive = true;
     X1Alive = true;
@@ -238,17 +248,17 @@ void displayX()
 }
 
 void collide() {
-if(X1==X2 && Y1==Y2)
+if(e[0].x==e[1].x && e[0].y==e[1].y)
   {
     X1Alive = false;
     X2Alive = false;
   }
-if(X1==X3 && Y1==Y3)
+if(e[0].x==e[2].x && e[0].y==e[2].y)
   {
     X1Alive = false;
     X3Alive = false;
   }  
-if(X2==X3 && Y2==Y3)
+if(e[1].x==e[2].x && e[1].y==e[2].y)
   {
     X2Alive = false;
     X3Alive = false;
