@@ -29,8 +29,21 @@ void loop()
 {
   while (gameOver == false)
 {
-  level1();
-  level2();
+    DrawPx(X,Y,White); //player
+  if(X1Alive)
+    DrawPx(e[0].x,e[0].y,Green); //enemy 1 (drawings) Green
+  else
+    DrawPx(e[0].x,e[0].y,Red);
+  if(X2Alive)
+    DrawPx(e[1].x,e[1].y,Blue); //enemy 2 (drawings) Blue
+  else
+    DrawPx(e[1].x,e[1].y,Red);
+  if(X3Alive)
+    DrawPx(e[2].x,e[2].y,Orange); //enemy 3 (drawings) Orange
+  else
+    DrawPx(e[2].x,e[2].y,Red);
+  DisplaySlate();
+  ClearSlate(); 
   playerMovement();
   //updateAmmo
   if (X1Alive) //movement
