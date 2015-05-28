@@ -12,14 +12,13 @@ struct Point
 Point p1 = {6,7}; //enemies kept in an array
 Point p2 = {1,7};
 Point p3 = {7,0};
-Point p4 = {7,7};
-Point e[64] = {p1,p2,p3,p4};
+Point e[64] = {p1,p2,p3};
 
 boolean gameOver = false; //running game while false, when true displays X
 boolean X1Alive = true; // enemy 1 alive
 boolean X2Alive = true; // enemy 2 alive
 boolean X3Alive = true; //enemy 3 alive
-boolean X4Alive = true; //enemy 4 alive
+//boolean X4Alive = true; //enemy 4 alive
 void setup()                 
 {
   MeggyJrSimpleSetup();     
@@ -28,30 +27,104 @@ void setup()
 void loop()                   
 {
   while (gameOver == false)
-{
-  level1();
-    if(X1Alive == false && X2Alive == false && X3Alive == false) {
-      DrawPx(0,7,Violet);
+  {
+    if(level==1){
+      
+    DrawPx(X,Y,White); //player
+  if(X1Alive)
+    DrawPx(e[0].x,e[0].y,Green); //enemy 1 (drawings) Green
+  else
+    DrawPx(e[0].x,e[0].y,Red);
+  if(X2Alive)
+    DrawPx(e[1].x,e[1].y,Blue); //enemy 2 (drawings) Blue
+  else
+    DrawPx(e[1].x,e[1].y,Red);
+  if(X3Alive)
+    DrawPx(e[2].x,e[2].y,Orange); //enemy 3 (drawings) Orange
+  else
+    DrawPx(e[2].x,e[2].y,Red);
+  DisplaySlate();
+  ClearSlate(); 
+  playerMovement();
+  //updateAmmo
+  if (X1Alive) //movement
+    enemy1();
+  if (X2Alive) //movement
+    enemy2();
+  if (X3Alive) //movement
+    enemy3();
+  crash();
+  collide();
+  
+   if(X1Alive == false && X2Alive == false && X3Alive == false) 
+    {
+      DrawPx(0,7,Violet);  
+      DisplaySlate();  
     }
-      if(ReadPx(X,Y) == Violet) {
-      level2();
-      ClearSlate();
-      }    
+    if(ReadPx(X,Y) == Violet) 
+    {
+     level++;
+      X=2;
+      Y=7;
+      e[0].x=5;
+      e[0].y=4;
+      e[1].x=5;
+      e[1].y=1;
+      e[2].x=0;
+      e[2].y=3;
+ X1Alive = true; // enemy 1 alive
+ X2Alive = true; // enemy 2 alive
+ X3Alive = true; //enemy 3 alive
+    }  
+} 
+    if (level==2) { 
+      
+    DrawPx(X,Y,White); //player
+  if(X1Alive)
+    DrawPx(e[0].x,e[0].y,Green); //enemy 1 (drawings) Green
+  else
+    DrawPx(e[0].x,e[0].y,Red);
+  if(X2Alive)
+    DrawPx(e[1].x,e[1].y,Blue); //enemy 2 (drawings) Blue
+  else
+    DrawPx(e[1].x,e[1].y,Red);
+  if(X3Alive)
+    DrawPx(e[2].x,e[2].y,Orange); //enemy 3 (drawings) Orange
+  else
+    DrawPx(e[2].x,e[2].y,Red);
+  DisplaySlate();
+  ClearSlate(); 
+  playerMovement();
+  //updateAmmo
+  if (X1Alive) //movement
+    enemy1();
+  if (X2Alive) //movement
+    enemy2();
+  if (X3Alive) //movement
+    enemy3();
+  crash();
+  collide();
+  
+    if(X1Alive == false && X2Alive == false && X3Alive == false)
+    {
+     DrawPx(5,7,Green);
+     DisplaySlate();
+    } 
+    if (ReadPx(X,Y) == Green) //Win Screen 
+    {
+      for(int i=0; i<8; i++)
+        for(int p=0; p<8; p++)
+        {
+          DrawPx(i,p,Green);
+          
+        } 
+      }
+           DisplaySlate(); 
 
-    DisplaySlate();
-    ClearSlate(); 
-    playerMovement();
-    //updateAmmo
-    if (X1Alive) //movement
-      enemy1();
-    if (X2Alive) //movement
-      enemy2();
-    if (X3Alive) //movement
-      enemy3();
-    crash();
-    collide();                 
-}
-  displayX();
+ } 
+ 
+} 
+  displayX(); // purple game over screen
 }
 
 
@@ -197,43 +270,7 @@ void enemy3()
   }
 }
 
-void enemy4()
-{
-  if(Button_Left) 
-  { 
-    if(X>e[3].x)
-      e[3].x++;
-    if(X<e[3].x)
-      e[3].x--;
-  }
-  if(Button_Right)
-  { 
-    if(X>e[3].x)
-      e[3].x++;
-    if(X<e[3].x)
-      e[3].x--;
-  }  
-  if(Button_Up) 
-  { 
-    if(Y>e[3].y)
-      e[3].y++;
-    if(Y<e[3].y)
-      e[3].y--;
-  }
-  if(Button_Down) 
-  { 
-    if(Y>e[3].y)
-      e[3].y++;
-    if(Y<e[3].y)
-      e[3].y--;
-  }
-}
-void flag()
-{
-  DrawPx(7,2,Blue);
-}
 
-  
 void crash() { //player collison with enemy
  if (e[0].x==X && e[0].y==Y)
   {
@@ -247,6 +284,11 @@ void crash() { //player collison with enemy
   {
     gameOver=true;
   } 
+ if (e[3].x==X && e[3].y==Y)
+  {
+    gameOver=true;
+  }   
+  
 }  
   
 void displayX()
@@ -260,6 +302,7 @@ void displayX()
   CheckButtonsPress();
   if(Button_A) {
     gameOver=false;
+    level=1;
     X=1;
     Y=1;
     e[0].x=6;
@@ -268,10 +311,9 @@ void displayX()
     e[1].y=7;
     e[2].x=7;
     e[2].y=0;
+    e[3].x=7;
+    e[3].y=7;
     X1Alive = true;
-    X2Alive = true;
-    X1Alive = true;
-    X3Alive = true;
     X2Alive = true;
     X3Alive = true;
     
@@ -298,78 +340,117 @@ if(e[1].x==e[2].x && e[1].y==e[2].y)
 if(e[0].x==e[3].x && e[0].y==e[3].y)
   {
     X2Alive = false;
-    X3Alive = false;
+    //X4Alive = false;
   } 
 if(e[1].x==e[3].x && e[1].y==e[3].y)
   {
     X2Alive = false;
-    X3Alive = false;
+    //X4Alive = false;
   }   
 if(e[2].x==e[3].x && e[2].y==e[3].y)
   {
     X2Alive = false;
-    X3Alive = false;
+    //X4Alive = false;
   }   
 }
 
 
 void level1() {
+
     DrawPx(X,Y,White); //player
-  if(X1Alive)
-    DrawPx(e[0].x,e[0].y,Green); //enemy 1 (drawings) Green
-  else
-    DrawPx(e[0].x,e[0].y,Red);
-  if(X2Alive)
-    DrawPx(e[1].x,e[1].y,Blue); //enemy 2 (drawings) Blue
-  else
-    DrawPx(e[1].x,e[1].y,Red);
-  if(X3Alive)
-    DrawPx(e[2].x,e[2].y,Orange); //enemy 3 (drawings) Orange
-  else
-    DrawPx(e[2].x,e[2].y,Red);
+    
+    if(X1Alive)
+      DrawPx(e[0].x,e[0].y,Green); //enemy 1 (drawings) Green
+    else
+      DrawPx(e[0].x,e[0].y,Red);
+      
+    if(X2Alive)
+      DrawPx(e[1].x,e[1].y,Blue); //enemy 2 (drawings) Blue
+    else
+      DrawPx(e[1].x,e[1].y,Red);
+      
+    if(X3Alive)
+      DrawPx(e[2].x,e[2].y,Orange); //enemy 3 (drawings) Orange
+    else
+      DrawPx(e[2].x,e[2].y,Red);
+      
+    if (X1Alive) { //movement
+      enemy1();
+    }
+    if (X2Alive) { //movement
+      enemy2(); 
+    }
+    if (X3Alive) { //movement
+      enemy3(); 
+    }
 }
 
 void level2() {
-e[0].x=6;
-e[0].y=6;
-e[1].x=5;
-e[1].y=1;
-e[2].x=2;
-e[2].y=3;
-e[3].x=3;
-e[3].y=4;
-X1Alive = true; // enemy 1 alive
-X2Alive = true; // enemy 2 alive
-X3Alive = true; //enemy 3 alive
-X4Alive = true; //enemy 4 alive
+      X=2;
+      Y=7;
+      e[0].x=5;
+      e[0].y=4;
+      e[1].x=5;
+      e[1].y=1;
+      e[2].x=0;
+      e[2].y=3;
+      //e[3].x=3;
+      //e[3].y=4;
+      X1Alive = true; // enemy 1 alive
+      X2Alive = true; // enemy 2 alive
+      X3Alive = true; //enemy 3 alive
+      //X4Alive = true; //enemy 4 alive
   DrawPx(X,Y,White); //player
   if(X1Alive)
     DrawPx(e[0].x,e[0].y,Green); //enemy 1 (drawings) Green
+    
   else
     DrawPx(e[0].x,e[0].y,Red);
+    
   if(X2Alive)
     DrawPx(e[1].x,e[1].y,Blue); //enemy 2 (drawings) Blue
   else
     DrawPx(e[1].x,e[1].y,Red);
+    
   if(X3Alive)
     DrawPx(e[2].x,e[2].y,Orange); //enemy 3 (drawings) Orange
   else
     DrawPx(e[2].x,e[2].y,Red);
-  if(X4Alive)
-    DrawPx(e[3].x,e[3].y,DimAqua); //enemy 4 (drawings) DimAqua
-  else
-    DrawPx(e[3].x,e[3].y,Red);    
-  DisplaySlate();
-  ClearSlate();
+    
+ // if(X4Alive)
+    //DrawPx(e[3].x,e[3].y,DimAqua);  //enemy 4 (drawings) DimAqua
+ // else
+    //DrawPx(e[3].x,e[3].y,Red); 
+    
+  if (X1Alive) {//movement
+      enemy1();}
+  if (X2Alive) {//movement
+      enemy2();}
+  if (X3Alive) {//movement
+      enemy3();}
+    //   if (X4Alive) 
+     //{
+       //enemy4(); 
+     //}    
+  if(X1Alive == false && X2Alive == false && X3Alive == false) 
+    {
+      DrawPx(5,7,Violet);    
+    }
 }
   
 // lv2. e1 (6,6) ; e2(5,1) ; e3(0,7) ; e4(3,4)
-// lv3. e1 (6,0) ; e2(7,1) ; e3(3,5) ; e4(2,3) ; e5(0,4)
+// lv3. e1 (6,0) ; e2(7,1) ; e3(3,5) ; e4(2,3) ;e5(0,4)
 // don't know if i should add more enemies, becomes near impossible
 // how to add levels?? 
 
-
-   
+void boom() {
+  if(Button_B) {
+    DrawPx(X+1,Y,Red);
+    DisplaySlate();
+    delay(100);
+    ClearSlate();
+  }
+}
 
 
     
